@@ -11,7 +11,6 @@
 # There are a few env variables defined in the .env file in
 # this directory (fastlane/.env)
 
-
 # unlocks keychain if KEYCHAIN_PASSWORD variable is present
 # (to be used on CI machines)
 def unlock_keychain_if_needed
@@ -56,7 +55,7 @@ end
 # `readonly`:
 #    if true  - only fetch existing certificates and profiles, don't upgrade from AppStoreConnect
 #    if false - read list of devices from AppStoreConnect, and upgrade the provisioning profiles from it
-def build_ios_adhoc(readonly)
+def build_ios_adhoc(config, readonly)
     match(
         type: "adhoc",
         force_for_new_devices: true,
@@ -67,7 +66,7 @@ def build_ios_adhoc(readonly)
     build_ios_app(
         scheme: "StatusIm",
         workspace: "ios/StatusIm.xcworkspace",
-        configuration: "Release",
+        configuration: config,
         clean: true,
         export_method: "ad-hoc",
         output_directory: "status-adhoc"
@@ -105,7 +104,7 @@ def build_ios_e2e
         # Normal stuff
         scheme: "StatusIm",
         workspace: "ios/StatusIm.xcworkspace",
-        configuration: "Release",
+        configuration: "PR",
         # Simulator apps can't be archived...
         skip_archive: true,
         # ...and we don't need an .ipa file for them, because we use .app directly
@@ -136,7 +135,7 @@ platform :ios do
   desc "This .ipa is ready to be distibuted through diawi.com"
   lane :adhoc do
     unlock_keychain_if_needed
-    build_ios_adhoc(true)
+    build_ios_adhoc("Release", true)
   end
 
   desc "`fastlane ios e2e` - e2e lane for iOS."
@@ -149,16 +148,19 @@ platform :ios do
 
   desc "`fastlane ios pr` - makes a new pr build"
   desc "This lane builds a new adhoc build and leaves an .ipa that is ad-hoc signed (can be uploaded to diawi)"
+  desc "It changes two parameters to avoid overriding releases:"
+  desc " - `CFBundleDisplayName` - `Status PR`"
+  desc " - `CFBundleIdentifier` - `im.status.ethereum.pr`"
   lane :pr do
     unlock_keychain_if_needed
-    build_ios_adhoc(false)
+    build_ios_adhoc("PR", false)
   end
 
   desc "`fastlane ios nightly` - makes a new nightly"
   desc "This lane builds a new nightly and leaves an .ipa that is ad-hoc signed (can be uploaded to diawi)"
   lane :nightly do
     unlock_keychain_if_needed
-    build_ios_adhoc(false)
+    build_ios_adhoc("Release", false)
   end
 
   desc "`fastlane ios release` builds a release & uploads it to TestFlight"
@@ -226,12 +228,15 @@ end
 
 
 platform :android do
+  # Optional env variables
+  APK_PATH = ENV["APK_PATH"] || "android/app/build/outputs/apk/release/app-release.apk"
+
   desc "Deploy a new internal build to Google Play"
   desc "expects GOOGLE_PLAY_JSON_KEY environment variable"
   lane :nightly do
     upload_to_play_store(
       track: "internal",
-      apk: "android/app/build/outputs/apk/release/app-release.apk",
+      apk: APK_PATH,
       json_key_data: ENV["GOOGLE_PLAY_JSON_KEY"]
     )
 
@@ -242,7 +247,7 @@ platform :android do
   lane :release do
     upload_to_play_store(
       track: "alpha",
-      apk: "android/app/build/outputs/apk/release/app-release.apk",
+      apk: APK_PATH,
       json_key_data: ENV["GOOGLE_PLAY_JSON_KEY"]
     )
   end
@@ -266,7 +271,7 @@ platform :android do
   desc "---"
   desc "Output: writes `fastlane/diawi.out` file url of the uploded file"
   lane :upload_diawi do
-    upload_to_diawi("android/app/build/outputs/apk/release/app-release.apk")
+    upload_to_diawi(APK_PATH)
   end
 
   desc "`fastlane android saucelabs` - upload .apk to sauce labs"
@@ -277,7 +282,7 @@ platform :android do
   desc "will fails if file isn't there"
   lane :saucelabs do
     upload_to_saucelabs(
-        "android/app/build/outputs/apk/release/app-release.apk"
+        APK_PATH
     )
   end
 end
