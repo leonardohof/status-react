@@ -58,6 +58,7 @@
             [status-im.test.accounts.recover.core]
             [status-im.test.hardwallet.core]
             [status-im.test.contact-recovery.core]
+            [status-im.test.contact-code.core]
             [status-im.test.ui.screens.currency-settings.models]
             [status-im.test.ui.screens.wallet.db]
             [status-im.test.sign-in.flow]))
@@ -129,6 +130,7 @@
  'status-im.test.ui.screens.wallet.db
  'status-im.test.browser.core
  'status-im.test.contact-recovery.core
+ 'status-im.test.contact-code.core
  'status-im.test.extensions.ethereum
  'status-im.test.browser.permissions
  'status-im.test.sign-in.flow)
