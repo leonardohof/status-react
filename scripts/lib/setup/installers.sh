@@ -16,7 +16,10 @@ function install_nsis() {
 }
 
 function install_and_setup_package_manager() {
-  if is_linux; then
+  if is_macos; then
+    install_homebrew_if_needed
+    brew_tap "caskroom/cask"
+  elif is_linux; then
     # Linux
     buildtools=(
       autoconf
@@ -36,6 +39,21 @@ function install_and_setup_package_manager() {
     for package in "${buildtools[@]}"; do
       linux_install "$package"
     done
+  fi
+}
+
+function install_homebrew_if_needed() {
+  ! is_macos && return 1
+
+  if test ! $(which brew); then
+    cecho "@b@blue[[+ Installing homebrew]]"
+
+    ruby -e "$(curl -fsSL \
+      https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    brew update
+  else
+    already_installed "Homebrew"
   fi
 }
 

@@ -34,6 +34,41 @@ function toolversion() {
 # Homebrew
 ########
 
+function brew_install() {
+  local package=$1
+  local required_version=$2
+  local url="https://raw.githubusercontent.com/Homebrew/homebrew-core/${3:-master}/Formula/$package.rb"
+
+  if ! is_macos; then
+    return 1
+  fi
+
+  local pkginfo=$(brew info "$package")
+  if [ $? -eq 0 ]; then
+    # Package already exists locally
+    local prefix_expr="HOMEBREW_PREFIX: "
+    local brew_base=$(brew config | grep "$prefix_expr" | sed "s|$prefix_expr||")
+    local pkg_base="$brew_base/Cellar/$package/"
+    local installed_versions=$(echo "$pkginfo" | grep "$pkg_base" | sed -E "s:$pkg_base([^ ]+).*$:\1:")
+    local active_version=$(echo "$pkginfo" | grep -E "$pkg_base.*\*$" | sed -E "s:$pkg_base([^ ]+).*\*$:\1:")
+
+    for installed_version in $installed_versions;
+    do
+      if [ "$installed_version" = "$required_version" ]; then
+        if [ "$active_version" = "$required_version" ]; then
+          already_installed "$package $required_version"
+        else
+          brew unlink "$package"
+          brew switch "$package" "$required_version"
+        fi
+        return
+      fi
+    done
+  fi
+
+  brew install $url
+}
+
 function brew_cask_install() {
   local package=$1
 
@@ -45,6 +80,18 @@ function brew_cask_install() {
     already_installed "$package"
   else
     brew cask install $@
+  fi
+}
+
+function brew_tap() {
+  local cask=$1
+
+  if ! is_macos; then
+    return 1
+  fi
+
+  if ! brew tap | grep -q "$cask"; then
+    brew tap "$cask"
   fi
 }
 
