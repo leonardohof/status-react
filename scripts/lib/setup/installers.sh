@@ -132,10 +132,10 @@ function install_react_native_cli() {
     npm_command="sudo $npm_command"
   fi
 
-  if npm list -g "react-native-cli@{required_version}" &>/dev/null; then
+  if npm list "react-native-cli@{required_version}" &>/dev/null; then
     already_installed "react-native-cli@{required_version}"
   else
-    $npm_command install -g react-native-cli@${required_version}
+    $npm_command install --no-save react-native-cli@${required_version}
   fi
 }
 

@@ -45,6 +45,9 @@ clean: ##@prepare Remove all output folders
 setup: ##@prepare Install all the requirements for status-react
 	@./scripts/setup
 
+shell: ##@prepare Enter into a preconfigured shell
+	@nix-shell
+
 prepare-desktop: ##@prepare Install desktop platform dependencies and prepare workspace
 	scripts/prepare-for-platform.sh desktop
 	yarn install --frozen-lockfile
