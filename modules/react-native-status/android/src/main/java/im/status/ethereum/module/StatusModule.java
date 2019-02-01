@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.os.*;
 import android.view.WindowManager;
->>>>>>> use gomobile binaries and status-go 0.17
 import android.util.Log;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
@@ -407,7 +406,7 @@ class StatusModule extends ReactContextBaseJavaModule implements LifecycleEventL
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                String result = Statusgo.VerifyAccountPassword(newKeystoreDir, address, password);
+                String result = Statusgo.verifyAccountPassword(newKeystoreDir, address, password);
 
                 callback.invoke(result);
             }
@@ -467,7 +466,7 @@ class StatusModule extends ReactContextBaseJavaModule implements LifecycleEventL
         Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    String res = Statusgo.SendDataNotification(dataPayloadJSON, tokensJSON);
+                    String res = Statusgo.sendDataNotification(dataPayloadJSON, tokensJSON);
                     callback.invoke(res);
                 }
             };
@@ -949,7 +948,7 @@ class StatusModule extends ReactContextBaseJavaModule implements LifecycleEventL
     Runnable r = new Runnable() {
       @Override
       public void run() {
-        String res = Statusgo.UpdateMailservers(enodes);
+        String res = Statusgo.updateMailservers(enodes);
 
         callback.invoke(res);
       }
