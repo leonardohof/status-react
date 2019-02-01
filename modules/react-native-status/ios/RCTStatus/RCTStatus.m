@@ -289,10 +289,8 @@ RCT_EXPORT_METHOD(verify:(NSString *)address
                      lastObject];
     NSURL *absKeystoreUrl = [rootUrl URLByAppendingPathComponent:@"keystore"];
     
-    char * result = VerifyAccountPassword((char *) [absKeystoreUrl.path UTF8String],
-                                          (char *) [address UTF8String],
-                                          (char *) [password UTF8String]);
-    callback(@[[NSString stringWithUTF8String: result]]);
+    NSString *result = StatusgoVerifyAccountPassword(absKeystoreUrl.path, address, password);
+    callback(@[result]);
 }
 
 ////////////////////////////////////////////////////////////////////
