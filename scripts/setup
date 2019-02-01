@@ -22,7 +22,12 @@ load_rvm_if_available
 ####
 setup_header "Installing requirements..."
 
-#install_and_setup_package_manager
+if ! program_exists "nix"; then
+  sh <(curl https://nixos.org/nix/install) --no-daemon && \
+    echo "Nix was successfully installed. Please type 'nix-shell' in the terminal and then run 'make setup' again"
+  exit
+fi
+install_and_setup_package_manager
 install_nsis
 install_react_native_cli
 install_android_sdk

@@ -22,18 +22,18 @@ function install_and_setup_package_manager() {
   elif is_linux; then
     # Linux
     buildtools=(
-      autoconf
-      automake
-      build-essential
+      # autoconf
+      # automake
+      # build-essential
       curl
-      g++
-      lib32ncurses5    # required for Android SDK
-      lib32stdc++6     # required for Android SDK
-      libssl-dev
-      libtool
-      make
-      pkg-config       # required to e.g. build watchman
-      python-dev
+      # g++
+      # lib32ncurses5    # required for Android SDK
+      # lib32stdc++6     # required for Android SDK
+      # libssl-dev
+      # libtool
+      # make
+      # pkg-config       # required to e.g. build watchman
+      # python-dev
     )
 
     for package in "${buildtools[@]}"; do
@@ -127,7 +127,7 @@ function install_react_native_cli() {
   local npm_command='npm'
   local required_version=$(toolversion react_native_cli)
 
-  if is_linux && ! nvm_installed; then
+  if is_linux; then
     # aptitude version of node requires sudo for global install
     npm_command="sudo $npm_command"
   fi

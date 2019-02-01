@@ -47,7 +47,7 @@ if [[ $PLATFORM == 'android' ]]; then
 fi
 
 if [[ $PLATFORM == 'setup' ]]; then
-  echo -e "${YELLOW}Finished! Please close your terminal, and reopen a new one before building Status.${NC}"
+  echo -e "${YELLOW}Finished! Please close your terminal, reopen a new one and type 'nix-shell' before building Status.${NC}"
 else
   echo -e "${GREEN}Finished!${NC}"
 fi
