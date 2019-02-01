@@ -44,7 +44,6 @@ clean: ##@prepare Remove all output folders
 
 setup: ##@prepare Install all the requirements for status-react
 	@./scripts/setup
-	@./scripts/run-environment-check.sh setup
 
 prepare-desktop: ##@prepare Install desktop platform dependencies and prepare workspace
 	scripts/prepare-for-platform.sh desktop
