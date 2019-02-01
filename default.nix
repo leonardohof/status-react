@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake
     extra-cmake-modules
-    conan
+    # conan # Need to make it conditional for Linux-only
     clojure
     go_1_10
     maven

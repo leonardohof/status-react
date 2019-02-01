@@ -34,7 +34,10 @@ if ! program_exists "nix"; then
 
   sh <(curl https://nixos.org/nix/install) --no-daemon && \
     echo -e "${YELLOW}*******************************************************************************************************"
-    echo "Nix was successfully installed. Please type 'nix-shell' in the terminal and then run 'make setup' again"
+    echo "Nix was successfully installed. Please do the following:"
+    echo "  - open a new terminal"
+    echo "  - type 'nix-shell' in the terminal"
+    echo "  - run 'make setup' again"
   echo -e "*********************************************************************************************************${NC}"
   exit
 fi
