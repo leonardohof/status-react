@@ -17,25 +17,16 @@ source_lib "installers.sh"
 
 exit_unless_os_supported
 
-load_nvm_if_available
 load_rvm_if_available
 
 ####
 setup_header "Installing requirements..."
 
-install_and_setup_package_manager
-install_wget
-install_java8
-install_clojure_cli
-install_leiningen
+#install_and_setup_package_manager
 install_nsis
-install_node
-install_yarn
-install_watchman
 install_react_native_cli
 install_android_sdk
 install_android_ndk
-install_maven
 install_cocoapods
 
 ####
