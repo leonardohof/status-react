@@ -69,7 +69,7 @@
 
 (fx/defn send-contact-update
   [{:keys [db] :as cofx} chat-id payload]
-  (when-let [chat (get-in cofx [:db :transport/chats chat-id])]
+  (if-let [chat (get-in cofx [:db :transport/chats chat-id])]
     (let [updated-chat  (assoc chat :resend? "contact-update")
           tx            [(transport-store/save-transport-tx {:chat-id chat-id
                                                              :chat    updated-chat})]
@@ -81,7 +81,9 @@
                  :data-store/tx tx}
                 (protocol/send-with-pubkey {:chat-id       chat-id
                                             :payload       payload
-                                            :success-event success-event})))))
+                                            :success-event success-event})))
+    (protocol/send-with-pubkey cofx {:chat-id       chat-id
+                                     :payload       payload})))
 (extend-type transport.contact/ContactUpdate
   protocol/StatusMessage
   (send [this _ {:keys [db] :as cofx}]
